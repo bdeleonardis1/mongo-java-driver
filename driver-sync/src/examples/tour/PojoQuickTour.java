@@ -82,57 +82,6 @@ public class PojoQuickTour {
         Person somebody = collection.find().first();
         System.out.println(somebody);
 
-        // now, lets add some more people so we can explore queries and cursors
-        List<Person> people = asList(
-                new Person("Charles Babbage", 45, new Address("5 Devonshire Street", "London", "W11")),
-                new Person("Alan Turing", 28, new Address("Bletchley Hall", "Bletchley Park", "MK12")),
-                new Person("Timothy Berners-Lee", 61, new Address("Colehill", "Wimborne", null))
-        );
-
-        collection.insertMany(people);
-        System.out.println("total # of people " + collection.countDocuments());
-
-        System.out.println("");
-        // lets get all the documents in the collection and print them out
-        Consumer<Person> printBlock = new Consumer<Person>() {
-            @Override
-            public void accept(final Person person) {
-                System.out.println(person);
-            }
-        };
-
-        collection.find().forEach(printBlock);
-
-        System.out.println("");
-        // now use a query to get 1 document out
-        somebody = collection.find(eq("address.city", "Wimborne")).first();
-        System.out.println(somebody);
-
-        System.out.println("");
-        // now lets find every over 30
-        collection.find(gt("age", 30)).forEach(printBlock);
-
-        System.out.println("");
-        // Update One
-        collection.updateOne(eq("name", "Ada Byron"), combine(set("age", 23), set("name", "Ada Lovelace")));
-
-        System.out.println("");
-        // Update Many
-        UpdateResult updateResult = collection.updateMany(not(eq("zip", null)), set("zip", null));
-        System.out.println(updateResult.getModifiedCount());
-
-        System.out.println("");
-        // Replace One
-        updateResult = collection.replaceOne(eq("name", "Ada Lovelace"), ada);
-        System.out.println(updateResult.getModifiedCount());
-
-        // Delete One
-        collection.deleteOne(eq("address.city", "Wimborne"));
-
-        // Delete Many
-        DeleteResult deleteResult = collection.deleteMany(eq("address.city", "London"));
-        System.out.println(deleteResult.getDeletedCount());
-
         // Clean up
         database.drop();
 

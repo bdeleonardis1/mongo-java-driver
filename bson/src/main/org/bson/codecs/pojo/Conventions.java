@@ -83,7 +83,6 @@ public final class Conventions {
      */
     public static final List<Convention> DEFAULT_CONVENTIONS =
             unmodifiableList(asList(CLASS_AND_PROPERTY_CONVENTION, ANNOTATION_CONVENTION, OBJECT_ID_GENERATORS));
-
     /**
      * An empty conventions list
      */

@@ -16,6 +16,10 @@
 
 package tour;
 
+import org.bson.BsonType;
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.codecs.pojo.annotations.BsonRepresentation;
 import org.bson.types.ObjectId;
 
 /**
@@ -24,7 +28,11 @@ import org.bson.types.ObjectId;
 public final class Person {
     private ObjectId id;
     private String name;
+
+    @BsonIgnore
     private int age;
+
+    @BsonRepresentation(BsonType.OBJECT_ID)
     private Address address;
 
     /**

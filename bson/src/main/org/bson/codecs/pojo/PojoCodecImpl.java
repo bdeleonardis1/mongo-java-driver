@@ -100,7 +100,9 @@ final class PojoCodecImpl<T> extends PojoCodec<T> {
             }
 
             for (PropertyModel<?> propertyModel : classModel.getPropertyModels()) {
+                System.out.printf("Name: %s, bsonRep: %s\n", propertyModel.getName(), propertyModel.getBsonRepresentation());
                 if (propertyModel.equals(classModel.getIdPropertyModel())) {
+                    System.out.println("In that if");
                     continue;
                 }
                 encodeProperty(writer, value, encoderContext, propertyModel);
@@ -141,6 +143,7 @@ final class PojoCodecImpl<T> extends PojoCodec<T> {
         return classModel;
     }
 
+    // TODO: will need some special casing for this one
     private <S> void encodeIdProperty(final BsonWriter writer, final T instance, final EncoderContext encoderContext,
                                       final IdPropertyModelHolder<S> propertyModelHolder) {
         if (propertyModelHolder.getPropertyModel() != null) {
@@ -319,7 +322,7 @@ final class PojoCodecImpl<T> extends PojoCodec<T> {
 
         return new PropertyModel<V>(propertyModel.getName(), propertyModel.getReadName(), propertyModel.getWriteName(),
                 specializedPropertyType, null, propertyModel.getPropertySerialization(), propertyModel.useDiscriminator(),
-                propertyModel.getPropertyAccessor(), propertyModel.getError());
+                propertyModel.getPropertyAccessor(), propertyModel.getError(), propertyModel.getBsonRepresentation());
     }
 
     @SuppressWarnings("unchecked")

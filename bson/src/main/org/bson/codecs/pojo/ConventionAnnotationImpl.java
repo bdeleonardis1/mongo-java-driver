@@ -18,11 +18,8 @@ package org.bson.codecs.pojo;
 
 
 import org.bson.codecs.configuration.CodecConfigurationException;
-import org.bson.codecs.pojo.annotations.BsonCreator;
-import org.bson.codecs.pojo.annotations.BsonDiscriminator;
-import org.bson.codecs.pojo.annotations.BsonId;
-import org.bson.codecs.pojo.annotations.BsonIgnore;
-import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.codecs.pojo.annotations.*;
+import org.bson.conversions.Bson;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -85,6 +82,10 @@ final class ConventionAnnotationImpl implements Convention {
                 classModelBuilder.idPropertyName(propertyModelBuilder.getName());
             } else if (annotation instanceof BsonIgnore) {
                 propertyModelBuilder.readName(null);
+            } else if (annotation instanceof BsonRepresentation) {
+                BsonRepresentation bsonRepresentation = (BsonRepresentation) annotation;
+                propertyModelBuilder.bsonRepresentation(bsonRepresentation.value());
+                propertyModelBuilder.getTypeData();
             }
         }
 
