@@ -27,12 +27,12 @@ import org.bson.types.ObjectId;
  */
 public final class Person {
     private ObjectId id;
+
     private String name;
 
-    @BsonIgnore
+    @BsonRepresentation(BsonType.STRING)
     private int age;
 
-    @BsonRepresentation(BsonType.OBJECT_ID)
     private Address address;
 
     /**

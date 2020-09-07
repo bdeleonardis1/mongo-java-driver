@@ -83,7 +83,7 @@ public class PojoQuickTour {
         System.out.println(somebody);
 
         // Clean up
-        database.drop();
+        //database.drop();
 
         // release resources
         mongoClient.close();

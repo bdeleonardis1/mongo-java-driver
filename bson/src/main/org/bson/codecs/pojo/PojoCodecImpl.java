@@ -15,18 +15,13 @@
  */
 package org.bson.codecs.pojo;
 
-import org.bson.BsonInvalidOperationException;
-import org.bson.BsonReader;
-import org.bson.BsonReaderMark;
-import org.bson.BsonType;
-import org.bson.BsonWriter;
-import org.bson.codecs.Codec;
-import org.bson.codecs.DecoderContext;
-import org.bson.codecs.EncoderContext;
+import org.bson.*;
+import org.bson.codecs.*;
 import org.bson.codecs.configuration.CodecConfigurationException;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.diagnostics.Logger;
 import org.bson.diagnostics.Loggers;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,8 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import static java.lang.String.format;
-import static org.bson.codecs.configuration.CodecRegistries.fromCodecs;
-import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
+import static org.bson.codecs.configuration.CodecRegistries.*;
 import static org.bson.codecs.pojo.PojoSpecializationHelper.specializeTypeData;
 
 
@@ -49,6 +43,7 @@ final class PojoCodecImpl<T> extends PojoCodec<T> {
     private final DiscriminatorLookup discriminatorLookup;
     private final ConcurrentMap<ClassModel<?>, Codec<?>> codecCache;
     private final boolean specialized;
+    private final CodecRegistry bsonRegistry = fromProviders(new BsonValueCodecProvider());
 
     PojoCodecImpl(final ClassModel<T> classModel, final CodecRegistry codecRegistry,
                   final List<PropertyCodecProvider> propertyCodecProviders, final DiscriminatorLookup discriminatorLookup) {
@@ -181,7 +176,22 @@ final class PojoCodecImpl<T> extends PojoCodec<T> {
                 writer.writeNull();
             } else {
                 try {
-                    encoderContext.encodeWithChildContext(propertyModel.getCachedCodec(), writer, propertyValue);
+                    if (propertyModel.getBsonRepresentation() != null) {
+                        switch (propertyModel.getBsonRepresentation()) {
+                            case OBJECT_ID:
+                                encoderContext.encodeWithChildContext(bsonRegistry.get(ObjectId.class), writer, new ObjectId());
+                                break;
+                            case STRING:
+                                if (propertyValue.getClass().equals(Integer.class)) {
+                                    System.out.println("We got in that if");
+                                    encoderContext.encodeWithChildContext(bsonRegistry.get(BsonString.class), writer, new BsonString(propertyValue.toString()));
+                                }
+                                break;
+                        }
+                        //bsonRegistry.get(propertyModel.getBsonRepresentation());
+                    } else {
+                        encoderContext.encodeWithChildContext(propertyModel.getCachedCodec(), writer, propertyValue);
+                    }
                 } catch (CodecConfigurationException e) {
                     throw new CodecConfigurationException(format("Failed to encode '%s'. Encoding '%s' errored with: %s",
                             classModel.getName(), propertyModel.getReadName(), e.getMessage()), e);
@@ -214,12 +224,25 @@ final class PojoCodecImpl<T> extends PojoCodec<T> {
                 if (reader.getCurrentBsonType() == BsonType.NULL) {
                     reader.readNull();
                 } else {
-                    Codec<S> codec = propertyModel.getCachedCodec();
-                    if (codec == null) {
-                        throw new CodecConfigurationException(format("Missing codec in '%s' for '%s'",
-                                classModel.getName(), propertyModel.getName()));
+                    if (propertyModel.getBsonRepresentation() != null) {
+                        switch (propertyModel.getBsonRepresentation()) {
+                            case STRING:
+                                Codec<BsonString> codec = bsonRegistry.get(BsonString.class);
+                                BsonString sValue = decoderContext.decodeWithChildContext(codec, reader);
+                                if (propertyModel.getTypeData().getType().equals(Integer.class)) {
+                                    value = (S) (Integer) Integer.parseInt(sValue.getValue());
+                                }
+                                break;
+
+                        }
+                    } else {
+                        Codec<S> codec = propertyModel.getCachedCodec();
+                        if (codec == null) {
+                            throw new CodecConfigurationException(format("Missing codec in '%s' for '%s'",
+                                    classModel.getName(), propertyModel.getName()));
+                        }
+                        value = decoderContext.decodeWithChildContext(codec, reader);
                     }
-                    value = decoderContext.decodeWithChildContext(codec, reader);
                 }
                 if (propertyModel.isWritable()) {
                     instanceCreator.set(value, propertyModel);

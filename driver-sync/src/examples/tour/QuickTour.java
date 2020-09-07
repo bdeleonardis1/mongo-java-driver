@@ -84,7 +84,7 @@ public class QuickTour {
 
         collection.insertOne(doc);
 
-        // get it (since it's the only one in there since we dropped the rest earlier on)
+        //w get it (since it's the only one in there since we dropped the rest earlier on)
         Document myDoc = collection.find().first();
         System.out.println(myDoc.toJson());
 
