@@ -18,7 +18,7 @@ package org.bson.codecs;
 
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.json.JsonString;
+import org.bson.json.JsonObjectString;
 import org.junit.Test;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
@@ -31,7 +31,7 @@ public class JsonStringCodecProviderTest {
     public void testJsonStringCodecProvider() {
         CodecProvider provider = new JsonStringCodecProvider();
         CodecRegistry registry = fromProviders(provider);
-        assertEquals(provider.get(JsonString.class, registry).getClass(), JsonStringCodec.class);
+        assertEquals(provider.get(JsonObjectString.class, registry).getClass(), JsonStringCodec.class);
         assertNull(provider.get(Integer.class, registry));
     }
 }

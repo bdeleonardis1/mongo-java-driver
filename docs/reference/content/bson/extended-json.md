@@ -117,7 +117,7 @@ The `Document.parse()` static factory method constructs an instance of a `JsonRe
 equivalent Document. `JsonReader` automatically detects the JSON flavor in the string, so you do not need to specify it.
 
 ### Reading and Writing JSON Directly
-If you do not need a document and only want to deal with JSON, you can use `JsonString` to read and write JSON directly. `JsonString` 
+If you do not need a document and only want to deal with JSON, you can use `JsonObjectString` to read and write JSON directly. `JsonObjectString` 
 is simply a wrapper class that takes in a `String` in the constructor and returns the `String` in the get `getJson()` method. 
 Reading and writing directly is more efficient than constructing a `Document` first and then calling `toJson()`, and it is also more efficient than calling `Document#parse`. 
 The codec responsible for reading/writing JSON (`JsonStringCodec`) is part of the default registry, so doing this is very simple 
@@ -125,9 +125,9 @@ and demonstrated by the following example:
 
 ```java
 MongoDatabase database = mongoClient.getDatabase("mydb");
-MongoCollection<JsonString> collection = database.getCollection("json", JsonString.class);
-collection.insertOne(new JsonString("{hello: 1}"));
-JsonString jsonString = collection.find().first();
+MongoCollection<JsonObjectString> collection = database.getCollection("json", JsonObjectString.class);
+collection.insertOne(new JsonObjectString("{hello: 1}"));
+JsonObjectString jsonObjectString = collection.find().first();
 ```
 
 ### Reading and Writing JSON with CustomSettings
@@ -141,7 +141,7 @@ CodecRegistry codecRegistry = fromRegistries(fromCodecs(
                 .build())),
         getDefaultCodecRegistry());
 MongoDatabase database = mongoClient.getDatabase("mydb").withCodecRegistry(codecRegistry);
-MongoCollection<JsonString> collection = database.getCollection("json", JsonString.class);
-collection.insertOne(new JsonString("{hello: 1}"));
+MongoCollection<JsonObjectString> collection = database.getCollection("json", JsonObjectString.class);
+collection.insertOne(new JsonObjectString("{hello: 1}"));
 ```
 

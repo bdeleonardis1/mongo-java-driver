@@ -18,7 +18,7 @@ package org.bson.codecs;
 
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.json.JsonString;
+import org.bson.json.JsonObjectString;
 
 /**
  * A codec for encoding/decoding JSON directly
@@ -30,7 +30,7 @@ public final class JsonStringCodecProvider implements CodecProvider {
     @Override
     @SuppressWarnings("unchecked")
     public <T> Codec<T> get(final Class<T> clazz, final CodecRegistry registry) {
-        if (clazz.equals(JsonString.class)) {
+        if (clazz.equals(JsonObjectString.class)) {
             return (Codec<T>) new JsonStringCodec();
         }
         return null;

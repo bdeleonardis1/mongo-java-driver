@@ -22,32 +22,32 @@ import org.bson.BsonDocumentWriter
 import org.bson.json.JsonMode
 import org.bson.json.JsonWriterSettings
 import spock.lang.Specification
-import org.bson.json.JsonString;
+import org.bson.json.JsonObjectString;
 
 import static org.bson.BsonDocument.parse
 
 class JsonStringCodecSpecification extends Specification {
-    def 'should have JsonString encoding class'() {
+    def 'should have JsonObjectString encoding class'() {
         given:
         def codec = new JsonStringCodec()
 
         expect:
-        codec.getEncoderClass() == JsonString
+        codec.getEncoderClass() == JsonObjectString
     }
 
-    def 'should encode JsonString correctly'() {
+    def 'should encode JsonObjectString correctly'() {
         given:
         def codec = new JsonStringCodec()
         def writer = new BsonDocumentWriter(new BsonDocument())
 
         when:
-        codec.encode(writer, new JsonString('{hello: {world: 1}}'), EncoderContext.builder().build())
+        codec.encode(writer, new JsonObjectString('{hello: {world: 1}}'), EncoderContext.builder().build())
 
         then:
         writer.document == parse('{hello: {world: 1}}')
     }
 
-    def 'should decode JsonString correctly'() {
+    def 'should decode JsonObjectString correctly'() {
         given:
         def codec = new JsonStringCodec()
         def reader = new BsonDocumentReader(parse('{hello: {world: 1}}'))

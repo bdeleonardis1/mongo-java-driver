@@ -18,7 +18,7 @@ package org.bson.codecs;
 
 import org.bson.BsonReader;
 import org.bson.BsonWriter;
-import org.bson.json.JsonString;
+import org.bson.json.JsonObjectString;
 import org.bson.json.JsonReader;
 import org.bson.json.JsonWriter;
 import org.bson.json.JsonWriterSettings;
@@ -30,7 +30,7 @@ import java.io.StringWriter;
  *
  * @since 4.2
  */
-public class JsonStringCodec implements Codec<JsonString> {
+public class JsonStringCodec implements Codec<JsonObjectString> {
     private final JsonWriterSettings writerSettings;
 
     /**
@@ -50,20 +50,20 @@ public class JsonStringCodec implements Codec<JsonString> {
     }
 
     @Override
-    public void encode(final BsonWriter writer, final JsonString value, final EncoderContext encoderContext) {
+    public void encode(final BsonWriter writer, final JsonObjectString value, final EncoderContext encoderContext) {
         writer.pipe(new JsonReader(value.getJson()));
     }
 
     @Override
-    public JsonString decode(final BsonReader reader, final DecoderContext decoderContext) {
+    public JsonObjectString decode(final BsonReader reader, final DecoderContext decoderContext) {
         StringWriter stringWriter = new StringWriter();
         new JsonWriter(stringWriter, writerSettings).pipe(reader);
-        return new JsonString(stringWriter.toString());
+        return new JsonObjectString(stringWriter.toString());
     }
 
     @Override
-    public Class<JsonString> getEncoderClass() {
-        return JsonString.class;
+    public Class<JsonObjectString> getEncoderClass() {
+        return JsonObjectString.class;
     }
 
 }

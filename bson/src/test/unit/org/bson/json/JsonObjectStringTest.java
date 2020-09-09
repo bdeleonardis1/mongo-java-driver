@@ -23,23 +23,23 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 
-public class JsonStringTest {
+public class JsonObjectStringTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNull() {
-        new JsonString(null);
+        new JsonObjectString(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testArray() {
-        new JsonString("['A', 'B', 'C']");
+        new JsonObjectString("['A', 'B', 'C']");
     }
 
     @Test
     public void testEqualsAndHashCode() {
-        JsonString j1 = new JsonString("{hello: 1}");
-        JsonString j2 = new JsonString("{hello: 1}");
-        JsonString j3 = new JsonString("{world: 2}");
+        JsonObjectString j1 = new JsonObjectString("{hello: 1}");
+        JsonObjectString j2 = new JsonObjectString("{hello: 1}");
+        JsonObjectString j3 = new JsonObjectString("{world: 2}");
 
         assertTrue(j1.equals(j1));
         assertTrue(j1.equals(j2));
@@ -55,7 +55,7 @@ public class JsonStringTest {
 
     @Test
     public void testGetJson() {
-        JsonString j1 = new JsonString("{hello: 1}");
+        JsonObjectString j1 = new JsonObjectString("{hello: 1}");
         assertEquals(j1.getJson(), "{hello: 1}");
     }
 }

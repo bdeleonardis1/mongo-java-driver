@@ -90,7 +90,7 @@ as chaining observables to enforce insertion order on import.
 {{% /note %}}
 
 ### Reading and Writing JSON Directly
-If you do not need a document and only want to deal with JSON, you can use `JsonString` to read and write JSON directly. `JsonString` 
+If you do not need a document and only want to deal with JSON, you can use `JsonObjectString` to read and write JSON directly. `JsonObjectString` 
 is simply a wrapper class that takes in a `String` in the constructor and returns the `String` in the get `getJson()` method. 
 Reading and writing directly is more efficient than constructing a `Document` first and then calling `toJson()`, and it is also more efficient than calling `Document#parse`. 
 The codec responsible for reading/writing JSON (`JsonStringCodec`) is part of the default registry, so doing this is very simple 
@@ -98,9 +98,9 @@ and demonstrated by the following example:
 
 ```scala
 val database: MongoDatabase = mongoClient.getDatabase("mydb")
-val collection: MongoCollection[JsonString] = database.getCollection("test")
-collection.insertOne(new JsonString("{hello: 1}")).printResults()
-val jsonString: SingleObservable[JsonString] = collection.find.first()
+val collection: MongoCollection[JsonObjectString] = database.getCollection("test")
+collection.insertOne(new JsonObjectString("{hello: 1}")).printResults()
+val jsonObjectString: SingleObservable[JsonObjectString] = collection.find.first()
 ```
 
 ### Reading and Writing JSON with CustomSettings
@@ -116,7 +116,7 @@ val codecRegistry =
         DEFAULT_CODEC_REGISTRY
       )
 val database: MongoDatabase = mongoClient.getDatabase("mydb").withCodecRegistry(codecRegistry)
-val collection: MongoCollection[JsonString] = database.getCollection("test")
-collection.insertOne(new JsonString("{hello: 1}")).printResults()
-val jsonString: SingleObservable[JsonString] = collection.find.first()
+val collection: MongoCollection[JsonObjectString] = database.getCollection("test")
+collection.insertOne(new JsonObjectString("{hello: 1}")).printResults()
+val jsonObjectString: SingleObservable[JsonObjectString] = collection.find.first()
 ```
