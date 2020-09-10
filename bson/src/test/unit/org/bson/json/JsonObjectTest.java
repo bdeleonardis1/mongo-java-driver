@@ -16,6 +16,8 @@
 
 package org.bson.json;
 
+import org.bson.BsonDocument;
+import org.bson.BsonInt32;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -23,23 +25,29 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 
-public class JsonObjectStringTest {
+public class JsonObjectTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testNull() {
-        new JsonObjectString(null);
+        new JsonObject(null);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testArray() {
-        new JsonObjectString("['A', 'B', 'C']");
+        new JsonObject("['A', 'B', 'C']");
+    }
+
+    @Test
+    public void testLeadingAndTrailingWhitespace() {
+        JsonObject j = new JsonObject("   {hello: 2}  ");
+        assertEquals(j.getJson(), "{hello: 2}");
     }
 
     @Test
     public void testEqualsAndHashCode() {
-        JsonObjectString j1 = new JsonObjectString("{hello: 1}");
-        JsonObjectString j2 = new JsonObjectString("{hello: 1}");
-        JsonObjectString j3 = new JsonObjectString("{world: 2}");
+        JsonObject j1 = new JsonObject("{hello: 1}");
+        JsonObject j2 = new JsonObject("{hello: 1}");
+        JsonObject j3 = new JsonObject("{world: 2}");
 
         assertTrue(j1.equals(j1));
         assertTrue(j1.equals(j2));
@@ -55,7 +63,14 @@ public class JsonObjectStringTest {
 
     @Test
     public void testGetJson() {
-        JsonObjectString j1 = new JsonObjectString("{hello: 1}");
+        JsonObject j1 = new JsonObject("{hello: 1}");
         assertEquals(j1.getJson(), "{hello: 1}");
+    }
+
+    @Test
+    public void testToBsonDocument() {
+        JsonObject j1 = new JsonObject("{hello: 1}");
+        BsonDocument b1 = new BsonDocument("hello", new BsonInt32(1));
+        assertEquals(j1.toBsonDocument(null, null), b1);
     }
 }

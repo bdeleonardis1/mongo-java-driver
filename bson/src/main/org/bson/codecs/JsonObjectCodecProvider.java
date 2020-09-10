@@ -18,20 +18,20 @@ package org.bson.codecs;
 
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.json.JsonObjectString;
+import org.bson.json.JsonObject;
 
 /**
- * A codec for encoding/decoding JSON directly
+ * A codec for encoding/decoding JSON objects directly
  *
  * @since 4.2
  */
-public final class JsonStringCodecProvider implements CodecProvider {
+public final class JsonObjectCodecProvider implements CodecProvider {
 
     @Override
     @SuppressWarnings("unchecked")
     public <T> Codec<T> get(final Class<T> clazz, final CodecRegistry registry) {
-        if (clazz.equals(JsonObjectString.class)) {
-            return (Codec<T>) new JsonStringCodec();
+        if (clazz.equals(JsonObject.class)) {
+            return (Codec<T>) new JsonObjectCodec();
         }
         return null;
     }

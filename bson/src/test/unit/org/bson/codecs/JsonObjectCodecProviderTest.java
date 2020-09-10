@@ -18,20 +18,20 @@ package org.bson.codecs;
 
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.json.JsonObjectString;
+import org.bson.json.JsonObject;
 import org.junit.Test;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class JsonStringCodecProviderTest {
+public class JsonObjectCodecProviderTest {
 
     @Test
-    public void testJsonStringCodecProvider() {
-        CodecProvider provider = new JsonStringCodecProvider();
+    public void testJsonObjectCodecProvider() {
+        CodecProvider provider = new JsonObjectCodecProvider();
         CodecRegistry registry = fromProviders(provider);
-        assertEquals(provider.get(JsonObjectString.class, registry).getClass(), JsonStringCodec.class);
+        assertEquals(provider.get(JsonObject.class, registry).getClass(), JsonObjectCodec.class);
         assertNull(provider.get(Integer.class, registry));
     }
 }
