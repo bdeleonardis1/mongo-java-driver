@@ -16,6 +16,8 @@
 
 package tour;
 
+import org.bson.BsonType;
+import org.bson.codecs.pojo.annotations.BsonRepresentation;
 import org.bson.types.ObjectId;
 
 /**
@@ -24,7 +26,9 @@ import org.bson.types.ObjectId;
 public final class Person {
     private ObjectId id;
     private String name;
-    private int age;
+
+    @BsonRepresentation(BsonType.INT32)
+    private String age;
     private Address address;
 
     /**
@@ -40,7 +44,7 @@ public final class Person {
      * @param age the age
      * @param address the address
      */
-    public Person(final String name, final int age, final Address address) {
+    public Person(final String name, final String age, final Address address) {
         this.name = name;
         this.age = age;
         this.address = address;
@@ -87,7 +91,7 @@ public final class Person {
      *
      * @return the age
      */
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
@@ -96,7 +100,7 @@ public final class Person {
      *
      * @param age the age
      */
-    public void setAge(final int age) {
+    public void setAge(final String age) {
         this.age = age;
     }
 
@@ -149,7 +153,7 @@ public final class Person {
     public int hashCode() {
         int result = getId() != null ? getId().hashCode() : 0;
         result = 31 * result + (getName() != null ? getName().hashCode() : 0);
-        result = 31 * result + getAge();
+        result = 31 * result + getAge().hashCode();
         result = 31 * result + (getAddress() != null ? getAddress().hashCode() : 0);
         return result;
     }
