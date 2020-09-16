@@ -79,8 +79,8 @@ configure(coreProjects) {
 configure(javaProjects) {
     apply plugin: 'java-library'
 
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_14
+    targetCompatibility = JavaVersion.VERSION_14
 
     sourceSets {
         main {
@@ -101,8 +101,8 @@ configure(scalaProjects) {
 
     group = 'org.mongodb.scala'
 
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_14
+    targetCompatibility = JavaVersion.VERSION_14
 
     dependencies {
         compile ('org.scala-lang:scala-library:%scala-version%')

@@ -23,9 +23,7 @@ ext {
 dependencies {
     api project(path: ':bson', configuration: 'default')
     api project(path: ':driver-core', configuration: 'default')
-
-    testImplementation project(':bson').sourceSets.test.output
-    testImplementation project(':driver-core').sourceSets.test.output
+    api project(path: ':driver-sync', configuration: 'default')
 }
 
 sourceSets {

@@ -1,0 +1,24 @@
+archivesBaseName = 'mongodb-driver-record-support'
+description =  'Add support for Records to the driver'
+ext {
+    pomName = 'MongoDB Driver'
+}
+
+dependencies {
+    api project(path: ':bson', configuration: 'default')
+    api project(path: ':driver-core', configuration: 'default')
+    api project(path: ':driver-sync', configuration: 'default')
+
+}
+
+tasks.withType(JavaCompile).all {
+    options.compilerArgs += ['--enable-preview']
+}
+
+tasks.withType(Test).all {
+    jvmArgs += '--enable-preview'
+}
+
+tasks.withType(JavaExec) {
+    jvmArgs += '--enable-preview'
+}
