@@ -23,7 +23,6 @@ ext {
 dependencies {
     api project(path: ':bson', configuration: 'default')
     api project(path: ':driver-core', configuration: 'default')
-    api project(path: ':driver-sync', configuration: 'default')
 }
 
 sourceSets {
