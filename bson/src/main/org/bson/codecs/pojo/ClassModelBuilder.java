@@ -57,6 +57,10 @@ public class ClassModelBuilder<T> {
     private String idPropertyName;
 
     ClassModelBuilder(final Class<T> type) {
+        if (type.isRecord()) {
+            System.out.println("We gotta a motha fucking record");
+        }
+
         configureClassModelBuilder(this, notNull("type", type));
     }
 
