@@ -20,26 +20,13 @@ public class RunPlease {
         MongoClient mongoClient = MongoClients.create();
         MongoDatabase database = mongoClient.getDatabase("mydb");
 
-        CodecRegistry recordCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+        CodecRegistry recordCodecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(), fromProviders(RecordCodecProvider.builder().build()));
 
-//        MongoCollection<School> collection = database.getCollection("schools", School.class).withCodecRegistry(recordCodecRegistry);
+        MongoCollection<School> collection = database.getCollection("schools", School.class).withCodecRegistry(recordCodecRegistry);
+
+        collection.insertOne(new School(new ObjectId(), "Hahaha university"));
+        System.out.println("The created school object: " + collection.find().first());
 //
-//        System.out.println("Document: " + collection.find().first());
-//        System.out.println(new School(new ObjectId(), "Berkeley"));
-//
-        School s = new School(new ObjectId(), "Berkeley");
 
-        try {
-            Constructor<? extends School> cons = s.getClass().getConstructor(new Class[] {ObjectId.class, String.class});
-
-            Object[] arguments = new Object[]{new ObjectId(), "created on da fly"};
-
-            for (RecordComponent comp : School.class.getRecordComponents()) {
-                System.out.println("Component name: " + comp.getName());
-                System.out.println("Component type: " + comp.getType());
-            }
-        } catch (Exception e) {
-            System.out.println("e: " + e);
-        }
     }
 }

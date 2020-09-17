@@ -18,7 +18,7 @@ public class RecordCodecProvider implements CodecProvider {
 
     @Override
     public <T> Codec<T> get(Class<T> clazz, CodecRegistry registry) {
-        return (Codec<T>) new SchoolCodec();
+        return (Codec<T>) new RecordCodec(clazz, registry);
     }
 
     public static final class Builder {
