@@ -1,22 +1,7 @@
-/*
- * Copyright 2008-present MongoDB, Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package org.bson.codecs.pojo;
+package com.mongodb.record.borrowed;
 
 import org.bson.codecs.configuration.CodecConfigurationException;
+import org.bson.codecs.pojo.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -34,6 +19,7 @@ import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableMap;
 import static org.bson.assertions.Assertions.notNull;
 import static org.bson.codecs.pojo.Conventions.DEFAULT_CONVENTIONS;
+
 import static org.bson.codecs.pojo.PojoBuilderHelper.configureClassModelBuilder;
 import static org.bson.codecs.pojo.PojoBuilderHelper.stateNotNull;
 
@@ -42,7 +28,7 @@ import static org.bson.codecs.pojo.PojoBuilderHelper.stateNotNull;
  *
  * @param <T> The type of the class the ClassModel represents
  * @since 3.5
- * @see ClassModel
+ * @see org.bson.codecs.pojo.ClassModel
  */
 public class ClassModelBuilder<T> {
     static final String ID_PROPERTY_NAME = "_id";
@@ -61,10 +47,10 @@ public class ClassModelBuilder<T> {
     ClassModelBuilder(final Class<T> type) {
         try {
             Method isRecord = type.getClass().getMethod("isRecord");
-
+            isRecord.invoke(type);
         } catch (NoSuchMethodException e) {
             System.out.println("In noSuchMethodException");
-            configureClassModelBuilder(this, notNull("type", type));
+            // configureClassModelBuilder(this, notNull("type", type));
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -360,3 +346,4 @@ public class ClassModelBuilder<T> {
     }
 
 }
+

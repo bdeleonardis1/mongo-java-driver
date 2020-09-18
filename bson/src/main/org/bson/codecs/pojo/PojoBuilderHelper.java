@@ -41,10 +41,10 @@ import static org.bson.codecs.pojo.PropertyReflectionUtils.getPropertyMethods;
 import static org.bson.codecs.pojo.PropertyReflectionUtils.isGetter;
 import static org.bson.codecs.pojo.PropertyReflectionUtils.toPropertyName;
 
-final class PojoBuilderHelper {
+final public class PojoBuilderHelper {
 
     @SuppressWarnings("unchecked")
-    static <T> void configureClassModelBuilder(final ClassModelBuilder<T> classModelBuilder, final Class<T> clazz) {
+    public static <T> void configureClassModelBuilder(final ClassModelBuilder<T> classModelBuilder, final Class<T> clazz) {
         classModelBuilder.type(notNull("clazz", clazz));
 
         ArrayList<Annotation> annotations = new ArrayList<Annotation>();
@@ -213,7 +213,7 @@ final class PojoBuilderHelper {
     }
 
     @SuppressWarnings("unchecked")
-    static <T> PropertyModelBuilder<T> createPropertyModelBuilder(final PropertyMetadata<T> propertyMetadata) {
+    public static <T> PropertyModelBuilder<T> createPropertyModelBuilder(final PropertyMetadata<T> propertyMetadata) {
         PropertyModelBuilder<T> propertyModelBuilder = PropertyModel.<T>builder()
                 .propertyName(propertyMetadata.getName())
                 .readName(propertyMetadata.getName())
@@ -254,7 +254,7 @@ final class PojoBuilderHelper {
         return builder.build();
     }
 
-    static <V> V stateNotNull(final String property, final V value) {
+    public static <V> V stateNotNull(final String property, final V value) {
         if (value == null) {
             throw new IllegalStateException(format("%s cannot be null", property));
         }

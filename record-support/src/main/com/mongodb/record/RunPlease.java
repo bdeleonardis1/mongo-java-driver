@@ -25,7 +25,7 @@ public class RunPlease {
         MongoCollection<School> collection = database.getCollection("schools", School.class).withCodecRegistry(recordCodecRegistry);
 
         collection.insertOne(new School(new ObjectId(), "Hahaha university"));
-        System.out.println("The created school object: " + collection.find().first());
+        //System.out.println("The created school object: " + collection.find().first());
 //
 
     }

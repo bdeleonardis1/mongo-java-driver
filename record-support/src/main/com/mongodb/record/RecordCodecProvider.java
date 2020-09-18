@@ -3,6 +3,8 @@ package com.mongodb.record;
 import org.bson.codecs.Codec;
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.ClassModel;
+import org.bson.codecs.pojo.ClassModelBuilder;
 
 public class RecordCodecProvider implements CodecProvider {
     private boolean automatic;
@@ -18,6 +20,8 @@ public class RecordCodecProvider implements CodecProvider {
 
     @Override
     public <T> Codec<T> get(Class<T> clazz, CodecRegistry registry) {
+        ClassModel<T> model = ClassModel.builder(clazz).build();
+
         return (Codec<T>) new RecordCodec(clazz, registry);
     }
 
