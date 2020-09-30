@@ -23,6 +23,9 @@ dependencies {
 
     api 'org.reactivestreams:reactive-streams:1.0.2'
 
+    compile group: 'org.springframework.data', name: 'spring-data-mongodb', version: '3.0.4.RELEASE'
+    compile group: 'io.projectreactor', name: 'reactor-core', version: '3.3.9.RELEASE'
+
     testImplementation project(':bson').sourceSets.test.output
     testImplementation project(':driver-sync')
     testImplementation project(':driver-sync').sourceSets.test.output
