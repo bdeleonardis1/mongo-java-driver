@@ -72,9 +72,6 @@ public class PojoQuickTour {
         final MongoCollection<Person> collection = database.getCollection("people", Person.class);
 
         // drop all the data in it
-        ObservableSubscriber<Void> successSubscriber = new OperationSubscriber<>();
-        collection.drop().subscribe(successSubscriber);
-        successSubscriber.await();
 
         // make a document and insert it
         final Person ada = new Person("Ada Byron", 20, new Address("St James Square", "London", "W1"));
@@ -142,11 +139,6 @@ public class PojoQuickTour {
         deleteSubscriber = new OperationSubscriber<>();
         collection.deleteMany(eq("address.city", "London")).subscribe(deleteSubscriber);
         deleteSubscriber.await();
-
-        // Clean up
-        successSubscriber = new OperationSubscriber<>();
-        database.drop().subscribe(successSubscriber);
-        successSubscriber.await();
 
         // release resources
         mongoClient.close();

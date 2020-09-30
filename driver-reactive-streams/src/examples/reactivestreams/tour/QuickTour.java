@@ -19,12 +19,11 @@ package reactivestreams.tour;
 
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import com.mongodb.reactivestreams.client.MongoCollection;
+import com.mongodb.reactivestreams.client.MongoDatabase;
+import org.bson.Document;
+import reactivestreams.helpers.SubscriberHelpers;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * The QuickTour code example
@@ -36,22 +35,29 @@ public class QuickTour {
      * @param args takes an optional single argument for the connection string
      */
     public static void main(final String[] args) {
-        try (MongoClient client = MongoClients.create()) {
-            ReactiveMongoTemplate template = new ReactiveMongoTemplate(client, "test");
+//        try (MongoClient client = MongoClients.create()) {
+//            ReactiveMongoTemplate template = new ReactiveMongoTemplate(client, "test");
+//
+//            String tel = "111111";
+//            System.out.println("Before save");
+//            Map<String, Object> data = new HashMap<>(Map.of("tel", tel, "child", Map.of("name", "Lily")));
+//            template.save(data, template.getCollectionName(Family.class)).block();
+//
+//            System.out.println("After save");
+//
+//            template.findOne(Query.query(Criteria.where("tel").is(tel)), Family.class)
+//                    .doOnError(Throwable::printStackTrace)
+//                    .block();
+//
+//            System.out.println("After findOne");
+//        }
+        MongoClient mongoClient = MongoClients.create();
+        MongoDatabase database = mongoClient.getDatabase("reactive");
+        final MongoCollection<Document> collection = database.getCollection("test");
 
-            String tel = "111111";
-            System.out.println("Before save");
-            Map<String, Object> data = new HashMap<>(Map.of("tel", tel, "child", Map.of("name", "Lily")));
-            template.save(data, template.getCollectionName(Family.class)).block();
-
-            System.out.println("After save");
-
-            template.findOne(Query.query(Criteria.where("tel").is(tel)), Family.class)
-                    .doOnError(Throwable::printStackTrace)
-                    .block();
-
-            System.out.println("After findOne");
-        }
+        SubscriberHelpers.SingleSubscriber<Document> documentSubscriber = new SubscriberHelpers.SingleSubscriber<>();
+        collection.find().subscribe(documentSubscriber);
+        //documentSubscriber.await();
     }
 
     public static abstract class Child {

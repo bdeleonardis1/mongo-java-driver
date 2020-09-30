@@ -267,6 +267,36 @@ public final class SubscriberHelpers {
         }
     }
 
+    public static class SingleSubscriber<T> implements Subscriber<T> {
+        private Subscription subscription;
+        private boolean cancelled = false;
+
+        @Override
+        public void onSubscribe(Subscription s) {
+            subscription = s;
+            subscription.request(5);
+        }
+
+        @Override
+        public void onNext(final T document) {
+            if (cancelled) {
+                throw new IllegalStateException("Already cancelled");
+            }
+            System.out.println("Document: " + document);
+            subscription.cancel();
+        }
+
+        @Override
+        public void onError(final Throwable t) {
+            System.out.println("HAHAHA we got an error: " + t.toString());
+        }
+
+        @Override
+        public void onComplete() {
+            System.out.println("Sure");
+        }
+    }
+
     private SubscriberHelpers() {
     }
 }
