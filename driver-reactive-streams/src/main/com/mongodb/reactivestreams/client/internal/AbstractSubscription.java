@@ -138,14 +138,12 @@ abstract class AbstractSubscription<TResult> implements Subscription {
     void onError(final Throwable t) {
         if (terminalAction()) {
             postTerminate();
-            try {
-                subscriber.onError(t);
-            } catch (Throwable t1) {
-                LOGGER.error("Calling onError threw an exception", t1);
-                throw MongoException.fromThrowableNonNull(t1);
-            }
-        } else {
-            throw new MongoException("Subscription has already been terminated", t);
+        }
+        try {
+            subscriber.onError(t);
+        } catch (Throwable t1) {
+            LOGGER.error("Calling onError threw an exception", t1);
+            throw MongoException.fromThrowableNonNull(t1);
         }
     }
 
