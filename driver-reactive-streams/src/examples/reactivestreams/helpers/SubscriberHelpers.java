@@ -267,55 +267,6 @@ public final class SubscriberHelpers {
         }
     }
 
-    public static class SingleSubscriber<T> implements Subscriber<T> {
-        private Subscription subscription;
-        private boolean cancelled = false;
-        CountDownLatch latch;
-
-        @Override
-        public void onSubscribe(Subscription s) {
-            subscription = s;
-            subscription.request(5);
-            latch = new CountDownLatch(1);
-        }
-
-        @Override
-        public void onNext(final T document) {
-            if (cancelled) {
-                throw new IllegalStateException("Already cancelled");
-            }
-            System.out.println("Document: " + document);
-            subscription.cancel();
-            int x = 0;
-            System.out.println(5 / x);
-        }
-
-        @Override
-        public void onError(final Throwable t) {
-            System.out.println("HAHAHA we got an error: " + t.toString());
-        }
-
-        @Override
-        public void onComplete() {
-            System.out.println("Sure");
-        }
-
-        public SingleSubscriber<T> await() {
-            long timeout = 60;
-            TimeUnit unit = TimeUnit.SECONDS;
-            subscription.request(Integer.MAX_VALUE);
-            try {
-                if (!latch.await(timeout, unit)) {
-                    throw new MongoTimeoutException("Publisher onComplete timed out");
-                }
-            } catch (InterruptedException e) {
-                throw new MongoInterruptedException("Interrupted waiting for observeration", e);
-            }
-
-            return this;
-        }
-    }
-
     private SubscriberHelpers() {
     }
 }
